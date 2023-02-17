@@ -1,4 +1,5 @@
 # curtain
+![image](https://user-images.githubusercontent.com/24313098/219612642-49585266-72d8-49a1-be3f-5da99c27c274.png)
 
 ## Project setup
 ```
