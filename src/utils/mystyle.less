@@ -1,0 +1,22 @@
+@theme-button: #ffda65;
+@theme-font: #8c3202;
+@theme-bgurl: "../assets/bg/curtain.png";
+
+.theme-font-color{
+  color: @theme-font;
+}
+
+.theme-button {
+  background-color: @theme-button;
+  border-color: @theme-button;
+  color: @theme-font;
+}
+
+.theme-bg {
+    background-image: url("@{theme-bgurl}");
+    background-size: cover;
+}
+
+.theme-no-ripple{
+    -webkit-tap-highlight-color:transparent;
+}
