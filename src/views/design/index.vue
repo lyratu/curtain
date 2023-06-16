@@ -3,8 +3,8 @@
     <div class="header">
       <!-- 左侧 -->
       <span>
-        <van-icon name="wap-home" size="1.125rem" @click="home" />
-        <span @click="home">首页</span>
+        <!-- <van-icon name="wap-home" size="1.125rem" /> -->
+        <!-- <span>首页</span> -->
         <span class="title">{{ name }}</span>
       </span>
       <!-- 中间 -->

@@ -9,14 +9,14 @@
               v-dragX="0"
               :key="index + 'left'"
               class="doubleImgLeft"
-              :src="$baseURL + item.first_resource_image"
+              :src="item.first_resource_image"
               v-if="item.material_type == 1"
             />
             <img
               v-dragX="1"
               :key="index + 'Right'"
               class="doubleImgRight"
-              :src="$baseURL + item.second_resource_image"
+              :src="item.second_resource_image"
               v-if="item.material_type == 1"
             />
             <img
@@ -158,7 +158,11 @@ export default {
   methods: {
     /* 设置窗帘图片 */
     setMatBg(item) {
+      console.log('setMatBg',item)
       item.length = 0;
+      item.material_type = 1
+      item.first_resource_image = item.content
+      item.second_resource_image = item.content
       this.curtainList.push(item);
       this.$toast("添加成功！");
     },

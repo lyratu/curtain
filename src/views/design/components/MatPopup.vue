@@ -1,5 +1,6 @@
 <template>
-  <van-popup round class="bgPopup" v-model="show" position="bottom" close-on-popstate @opened="opened" safe-area-inset-bottom @click-close-icon="close">
+  <van-popup round class="bgPopup" v-model="show" position="bottom" close-on-popstate @opened="opened"
+    safe-area-inset-bottom @click-close-icon="close">
     <div class="popup-title">
       <div>
         <span>添加窗帘</span>
@@ -27,7 +28,10 @@ export default {
   data() {
     return {
       show: false,
-      imgList: [],
+      imgList: [
+        { url: require('../../../assets/curtain/cu1.png') },
+        { url: require('../../../assets/curtain/cu2.png') },
+        { url: require('../../../assets/curtain/cu3.png') }],
       // 品名
       productList: [],
       // 风格
@@ -37,7 +41,7 @@ export default {
       // 窗帘列表
     };
   },
-  mounted() {},
+  mounted() { },
   methods: {
     close() {
       this.show = false;
@@ -46,13 +50,13 @@ export default {
       this.$router.push("/curtain");
     },
     setMat(item) {
-      console.log(item);
+      item.content = item.url
       this.setMatBg(item);
     },
-    review(item) {},
-    getCurtain() {},
+    review(item) { },
+    getCurtain() { },
     /* 接口请求数据 */
-    opened() {},
+    opened() { },
   },
 };
 </script>
@@ -61,6 +65,7 @@ export default {
 .bgPopup {
   box-sizing: border-box;
   padding: 1rem 1.25rem;
+
   .popup-title {
     display: flex;
     align-items: center;
@@ -68,29 +73,37 @@ export default {
     font-size: 1rem;
     padding-bottom: 1rem;
     border-bottom: 1px solid #f5f5f5;
+
     span {
       margin-right: 1.5rem;
     }
+
     .right {
       display: flex;
       align-items: center;
+
       .search {
         padding: 0;
         margin-right: 1.5625rem;
+
         .van-search__content {
           border-radius: 1.125rem;
         }
+
         /deep/ .van-field {
           width: 11.25rem;
           height: 2rem;
         }
+
         /deep/ .van-field__control {
           font-size: 0.875rem;
         }
+
         /deep/ .van-icon {
           font-size: 0.875rem;
         }
       }
+
       .close {
         vertical-align: middle;
         font-weight: bold;
@@ -101,19 +114,24 @@ export default {
         border-radius: 50%;
         background: #f6f5fa;
       }
+
       .dropMenu {
         width: 6.25rem;
+
         /deep/ .van-dropdown-menu__bar {
           height: 0;
         }
+
         /deep/ .van-dropdown-menu {
           height: 1.375rem;
         }
+
         /deep/ .van-dropdown-menu__item {
           height: 1.375rem;
           width: 0px;
           pointer-events: all;
         }
+
         /deep/ .van-dropdown-menu__title {
           font-size: 1rem !important;
           line-height: 1.375rem;
@@ -121,6 +139,7 @@ export default {
       }
     }
   }
+
   // [x] 不用上传图片了
   .matSelect {
     .title {
@@ -129,18 +148,22 @@ export default {
       margin: 0.625rem 0;
       color: #333333;
       font-size: 1rem;
+
       .switch {
         font-size: 0.625rem;
+
         label {
           margin-right: 0.375rem;
           vertical-align: top;
         }
       }
     }
+
     .list {
       display: flex;
       align-items: top;
       overflow-x: auto;
+
       .add {
         height: 5rem;
         width: 5rem;
@@ -152,6 +175,7 @@ export default {
         background: #f6f5fa;
         border-radius: 0.125rem;
       }
+
       .item {
         width: 5rem;
         display: flex;
@@ -160,14 +184,17 @@ export default {
         text-align: center;
         margin: 0 0.625rem;
         flex-direction: column;
+
         img {
           height: 5rem;
           border-radius: 0.125rem;
         }
+
         span {
           font-size: 0.625rem;
           color: #b0b0b2;
         }
+
         .delIco {
           color: #ffda65;
           font-size: 0.75rem;
@@ -178,16 +205,19 @@ export default {
       }
     }
   }
+
   .select {
     color: #333333;
     white-space: nowrap;
     padding: 0.625rem 0;
     border-bottom: 1px solid #f5f5f5;
+
     .title {
       vertical-align: middle;
       font-size: 1rem;
       margin-right: 1.25rem;
     }
+
     .item {
       margin-right: 0.75rem;
       font-weight: 400;
@@ -197,10 +227,10 @@ export default {
       padding: 0.25rem 0.75rem;
       background: #f5f5f5;
     }
+
     .selected {
       color: #8c3202 !important;
       background: #ffda65 !important;
     }
   }
-}
-</style>
+}</style>
