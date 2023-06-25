@@ -5,40 +5,16 @@
       <div ref="plane" id="plane">
         <template v-for="(item, index) in curtainList">
           <template v-if="!item.isEle">
-            <img
-              v-dragX="0"
-              :key="index + 'left'"
-              class="doubleImgLeft"
-              :src="item.first_resource_image"
-              v-if="item.material_type == 1"
-            />
-            <img
-              v-dragX="1"
-              :key="index + 'Right'"
-              class="doubleImgRight"
-              :src="item.second_resource_image"
-              v-if="item.material_type == 1"
-            />
-            <img
-              :key="index"
-              v-dragY="1"
-              class="imgToHalfBottom"
-              :src="$baseURL + item.first_resource_image"
-              v-else-if="item.material_type == 2"
-            />
-            <img
-              :key="index"
-              v-dragY="0"
-              class="imgToBottom"
-              :src="$baseURL + item.first_resource_image"
-              v-else-if="item.material_type == 3"
-            />
-            <img
-              :key="index"
-              class="fullImg"
-              :src="$baseURL + item.first_resource_image"
-              v-else-if="item.material_type == 4"
-            />
+            <img v-dragX="0" :key="index + 'left'" class="doubleImgLeft" :src="item.first_resource_image"
+              v-if="item.material_type == 1" />
+            <img v-dragX="1" :key="index + 'Right'" class="doubleImgRight" :src="item.second_resource_image"
+              v-if="item.material_type == 1" />
+            <img :key="index" v-dragY="1" class="imgToHalfBottom" :src="$baseURL + item.first_resource_image"
+              v-else-if="item.material_type == 2" />
+            <img :key="index" v-dragY="0" class="imgToBottom" :src="$baseURL + item.first_resource_image"
+              v-else-if="item.material_type == 3" />
+            <img :key="index" class="fullImg" :src="$baseURL + item.first_resource_image"
+              v-else-if="item.material_type == 4" />
           </template>
         </template>
       </div>
@@ -99,22 +75,43 @@ export default {
         /* 上一次的宽度、上一次的left */
         let preWidth = null,
           preLeft = null;
-        el.addEventListener("touchstart", (e) => {
+        // touchstart
+        const touchstart = (e) => {
           let { clientX: x, clientY: y } = e.targetTouches[0];
           firstPoint = { x, y };
           preWidth = el.width;
           preLeft = el.offsetLeft;
-        });
-        el.addEventListener("touchmove", (e) => {
-          // 阻止页面默认滚动
-          e.preventDefault();
+        }
+        // touchmove
+        const touchmove = (e) => {
+
           let { clientX: x } = e.targetTouches[0];
           let offsetX = value == 0 ? firstPoint.x - x : -firstPoint.x + x;
           if (preWidth - offsetX < parentWidth / 2 && preWidth - offsetX > 10) {
             el.style.left = value == 0 ? "" : offsetX + preLeft + "px";
             el.style.width = preWidth - offsetX + "px";
           }
-        });
+        }
+        el.ontouchstart = (e) => {
+          touchstart(e)
+        }
+        el.ontouchmove = (e) => {
+          // 阻止页面默认滚动
+          e.preventDefault();
+          e = e?.targetTouches ? e : { targetTouches: [e] }
+          touchmove(e)
+        }
+        el.onmousedown = (e) => {
+          e = e?.targetTouches ? e : { targetTouches: [e] }
+          touchstart(e)
+          el.onmousemove = (e) => {
+            e = e?.targetTouches ? e : { targetTouches: [e] }
+            touchmove(e)
+          }
+        }
+        el.onmouseup = ()=>{
+          el.onmousemove = null
+        }
       },
     },
     dragY: {
@@ -158,7 +155,7 @@ export default {
   methods: {
     /* 设置窗帘图片 */
     setMatBg(item) {
-      console.log('setMatBg',item)
+      console.log('setMatBg', item)
       item.length = 0;
       item.material_type = 1
       item.first_resource_image = item.content
@@ -235,9 +232,9 @@ export default {
             let scale = w > h ? h : w;
             // [x]偏移量响应式有差距--已解决
             let pLeft =
-                w > h
-                  ? -polygon.left - 1
-                  : -polygon.left + (width - img.width * scale) / 2 - 1,
+              w > h
+                ? -polygon.left - 1
+                : -polygon.left + (width - img.width * scale) / 2 - 1,
               pTop =
                 w > h
                   ? -polygon.top + (height - img.height * scale) / 2 - 1
@@ -517,16 +514,14 @@ export default {
         // 初始化位置
         e.style.left = data[index].X - 18 * this.fontScale + "px";
         e.style.top = data[index].Y - 18 * this.fontScale + "px";
-
-        e.addEventListener("touchstart", function (event) {
+        // touchstart
+        const touchstart = (event) => {
           let ev = event.targetTouches[0];
           data[index].X = ev.clientX - e.offsetLeft;
           data[index].Y = ev.clientY - e.offsetTop;
-        });
+        }
+        const touchmove = (event) => {
 
-        e.addEventListener("touchmove", (event) => {
-          // 阻止默认触碰移动事件
-          event.preventDefault();
           let evx = event.targetTouches[0].clientX;
           let evy = event.targetTouches[0].clientY;
           let _w = window.screen.width;
@@ -558,7 +553,31 @@ export default {
           }
 
           this.transform.update();
+        }
+        e.addEventListener("touchstart", function (event) {
+          touchstart(event)
         });
+        e.addEventListener("touchmove", (event) => {
+          // 阻止默认触碰移动事件
+          event.preventDefault();
+          touchmove(event)
+        });
+        e.addEventListener("mousedown", function (event) {
+          event = event?.targetTouches ? event : { targetTouches: [event] }
+          touchstart(event)
+          e.onmousemove = (event) => {
+            // 阻止默认触碰移动事件
+            event.preventDefault();
+            event = event?.targetTouches ? event : { targetTouches: [event] }
+            console.log('[ event ] >', event)
+            touchmove(event)
+          }
+
+        })
+        e.addEventListener("mouseup", function () {
+          e.onmousemove = null
+        })
+
         e.addEventListener("touchend", () => {
           // console.log(transform);
         });
@@ -576,6 +595,7 @@ export default {
   width: 0;
   position: absolute;
 }
+
 .container {
   left: 50%;
   top: 50%;
@@ -584,12 +604,15 @@ export default {
   height: 12.5rem;
   position: absolute;
   transform: translate(-50%, -50%);
+
   .tr {
     width: 1.125rem;
     height: 1.125rem;
     padding: 0.625rem;
     position: fixed;
+    cursor: move;
   }
+
   .tr::after {
     content: "";
     width: 1.125rem;
@@ -614,13 +637,18 @@ export default {
       height: 100%;
       width: 2.5rem;
       position: absolute;
+
+      -webkit-user-drag: none;
     }
+
     .doubleImgLeft {
       left: 0;
     }
+
     .doubleImgRight {
       left: 10rem;
     }
+
     .imgToBottom,
     .imgToHalfBottom {
       left: 0;
@@ -628,12 +656,15 @@ export default {
       height: 2.5rem;
       position: absolute;
     }
+
     .imgToBottom {
       height: 2.5rem;
     }
+
     .imgToHalfBottom {
       height: 1.25rem;
     }
+
     .fullImg {
       height: 100%;
       width: 100%;
